@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+{% block head %}
+<style>
+    .control-label {
+        color:grey;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container card main_card" style="padding-bottom: 5px;padding-top: 5px;">
+    <h4>Publish a video for {{ username }}</h4>
+    <form method="post" class="uniForm" enctype="multipart/form-data" id="campaign_form" name="campaign_form">
+    {% csrf_token %}
+    <!--{{ form|crispy }} I have no idea why but we need to keep this-->
+
+        <!-- Business Name -->
+        <div class="form-group">
+            <label class="control-label">Video url</label>
+            {{ form.video_url }}
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Coupon description and link</label>
+            {{ form.coupon_url }}
+        </div>
+
+
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+
+        <button class="btn btn-primary" onclick="publish_video(event, 'facebook')"
+        {% if fb_connected == 0%} disabled="true"{% endif %}>Publish on Facebook</button>
+
+  </form>
+</div>
+{% endblock %}
+
+{% block footer_javascript_page %}
+<script>
+    function publish_video(event, network) {
+        event.preventDefault();
+
+        let myform = document.forms["campaign_form"];
+        myform.social_network.value = network;
+        myform.submit()
+
+    }
+
+</script>
+{% endblock footer_javascript_page %}

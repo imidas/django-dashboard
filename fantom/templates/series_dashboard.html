@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block head %}
+
+{% endblock head %}
+
+{% block content %}
+<style>
+    .thumbnail_wrapper_div {
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+</style>
+{% for serie in series %}
+<div  onclick="setFocus(this);">
+<div class="card">
+    <div class="row card-body">
+        <div id="img_col_{{ forloop.counter0 }}" class="col-sm-4">
+            <img id="thumb_{{ forloop.counter0 }}" class="img-fluid"
+                 src="{% if serie.thumbnail %}  {{ serie.thumbnail.url|default_if_none:'#' }}  {% else %} # {% endif %}" width="250">
+        </div>
+        <div id="txt_col_{{ forloop.counter0 }}" class="col-sm-8">
+            <div class="row">
+                <h5 class="card-title">{{ serie.name }}</h5>
+                <button class="btn btn-primary btn-sm" style="margin-left: auto; ">Subscribe</button>
+            </div>
+            <div class="row series-text-box" id="hosts_{{ forloop.counter0 }}"><div><b>Hosts:</b> {{ serie.hosts }}</div></div>
+            <div id="toggled_box_{{ forloop.counter0 }}" class="toggled_box" style="display:none;">
+                <div class="row series-text-box">
+                    <div class="col-sm-6"><b>Hosts:</b> {{ serie.hosts }}</div>
+                    <div class="col-sm-6"><b>Delivered:</b> {{ serie.delivered }}</div>
+                </div>
+                <div class="row series-text-box">
+                    <div class="col-sm-6"><b>Channels:</b> {{ serie.channels }}</div>
+                    <div class="col-sm-6"><b>Average Length:</b> {{ serie.average_length }}</div>
+                </div>
+                <br>
+                <div class="row series-text-box">
+                    {{ serie.description }}
+                </div>
+                <br>
+
+                <div class="row series-text-box"><div><b>Topics:</b> {{ serie.topics }}</div></div>
+                <div class="row series-text-box"><div><b>Demographics:</b> {{ serie.recommended_age_range }}</div></div>
+
+            </div>
+            <div class="row" style="margin-top: 15px;">
+            <div class="form-check">
+                    <label class="form-check-label"><input type="checkbox" class="form-check-input" value={{ serie.editable}} {%if serie.editable%} checked="checked"{%endif%}>Editable</label>
+                </div>
+            <div class="row" style="margin-top: 15px;">
+
+            {% for video in serie.raw_videos.all|dictsort:"date_created"|slice:":4" %}
+                    <div class="thumbnail_wrapper_div">
+                <a href="{% url 'view_video' video.pk %}">{{ video.thumbnail_url|default_if_none:'#' }}</a>
+                    </div>
+            {% endfor %}
+        </div>
+        </div>
+
+    </div>
+
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
+
+{% block footer_javascript_page %}
+<script>
+    const SMALL_IMG_WIDTH = 250;
+    const BIG_IMG_WIDTH = 400;
+
+    function removeFocusFromBox(e) {
+        let id = e.id.split("_");
+        id = id[id.length - 1];
+        // hide toggle_box (this element)
+        e.style.display = "none";
+
+        // show hosts div
+        document.getElementById("hosts_" + id).style.display = "block";
+
+        // resize image width to SMALL_IMG_WIDTH
+        document.getElementById("thumb_" + id).width = SMALL_IMG_WIDTH;
+
+        // change ratio between imag and text columns
+        document.getElementById("img_col_" + id).className = "col-sm-4";
+        document.getElementById("txt_col_" + id).className = "col-sm-8";
+    }
+
+    function selectBox(e) {
+        let id = e.id.split("_");
+        id = id[id.length - 1];
+        // show toggle_box (this element)
+        e.style.display = "block";
+
+        // hide hosts div
+        document.getElementById("hosts_" + id).style.display = "none";
+
+        // resize image width to BIG_IMG_WIDTH
+        document.getElementById("thumb_" + id).width = BIG_IMG_WIDTH;
+
+        // change ratio between imag and text columns
+        document.getElementById("img_col_" + id).className = "col-sm-5";
+        document.getElementById("txt_col_" + id).className = "col-sm-7";
+    }
+
+
+    function setFocus(e) {
+        let boxes = document.getElementsByClassName("toggled_box");
+        [].forEach.call(boxes, function(e) {
+            removeFocusFromBox(e);
+        });
+        selectBox(e.getElementsByClassName("toggled_box")[0]);
+    }
+
+    $(document).ready(function() {
+        selectBox(document.getElementById("toggled_box_0"));
+    });
+</script>
+{% endblock footer_javascript_page %}

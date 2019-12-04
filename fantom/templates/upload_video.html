@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load crispy_forms_field %}
+{% block head %}
+<link rel="stylesheet" href="https://test.s3.amazonaws.com/css/upload2.css">
+
+{% endblock %}
+{% block content %}
+
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+{% if rendered_video %}
+<div class="container"><p class="good">video is ready! <a href=" {{ rendered_video }} " target="_blank">click here</a> to watch</p></div>
+{% endif %}
+<div class="container card main_card">
+    <div id="brand_image_div">
+        <img src="https://test.com/site/images/test-Logo-black-yellow.png" width="400px">
+    </div>
+    <form method="post" class="uniForm" enctype="multipart/form-data">
+    {% csrf_token %}
+
+        <!-- Content Uploading -->
+        <div class="form-group">
+            <label class="control-label">Content</label>
+            <div class="input-group">
+                <div class="custom-file">
+                    {% crispy_field form.video 'class' 'custom-file-input' %}
+                    <label id="video_label" for="{{ form.video.id_for_label }}"
+                           class="custom-file-label"> {{ "Choose Content" |safe }} </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- First Insert -->
+        <input type="checkbox" onclick="enableInsert(this, 'first_insert_card');" class="insert_checkbox"/><label class="control-label">First Insert</label>
+        <div id="first_insert_card" class="card card-body" style="display:none">
+            <div class="form-group">
+                <label class="control-label">Media</label>
+                <div class="input-group">
+                    <div class="custom-file">
+                        {% crispy_field form.first_insert_img 'class' 'custom-file-input' %}
+                        <label id="first_insert_img_label" for="{{ form.first_insert_img.id_for_label }}"
+                               class="custom-file-label"> {{ "Choose Media File" |safe }} </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="first_insert_audio_group" style="display:none">
+                <label class="control-label">Audio</label>
+                <div class="input-group">
+                    <div class="custom-file">
+                        {% crispy_field form.first_insert_audio 'class' 'custom-file-input' %}
+                        <label id="first_insert_audio_label" for="{{ form.first_insert_audio.id_for_label }}"
+                               class="custom-file-label"> {{ "Choose Audio" |safe }}
+                        </label>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Insert at (timestamp)</label>
+                {{ form.first_insert_time }}
+                <small class="form-text text-muted">Format is hours:minutes:seconds:frames</small>
+
+            </div>
+        </div>
+
+        <!-- Second Insert -->
+        <br>
+        <input type="checkbox" onclick="enableInsert(this, 'second_insert_card');" class="insert_checkbox"/><label class="control-label">Second Insert</label>
+        <div class="card card-body" id="second_insert_card" style="display:none">
+            <div class="form-group">
+                <label class="control-label">Media</label>
+                <div class="input-group">
+                    <div class="custom-file">
+                        {% crispy_field form.second_insert_img 'class' 'custom-file-input' %}
+                        <label id="second_insert_img_label" for="{{ form.second_insert_img.id_for_label }}"
+                               class="custom-file-label"> {{ "Choose Media File" |safe }} </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="second_insert_audio_group" style="display:none">
+                <label class="control-label">Audio</label>
+                <div class="input-group">
+                    <div class="custom-file">
+                        {% crispy_field form.second_insert_audio 'class' 'custom-file-input' %}
+                        <label id="second_insert_audio_label" for="{{ form.second_insert_audio.id_for_label }}"
+                               class="custom-file-label"> {{ "Choose Audio" |safe }} </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logo Uploading -->
+        <div class="form-group">
+            <input type="checkbox" onclick="enableInsert(this, 'logo_insert_group');" class="insert_checkbox"/><label class="control-label">Logo</label>
+            <div class="input-group" id="logo_insert_group" style="display:none">
+                <div class="custom-file">
+                    {% crispy_field form.logo 'class' 'custom-file-input' %}
+                    <label id="logo_label" for="{{ form.logo.id_for_label }}"
+                           class="custom-file-label"> {{ "Choose Logo" |safe }} </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logo Placement -->
+        <div class="form-group">
+            <label class="control-label">Logo Placement</label>
+            <div class="form-group" style="flex-direction: row;">
+                <select class = "form-control" id="logo_placement" for="{{ form.logo_placement}}">
+                    <option value="top_left" >Top-Left</option>
+                    <option value="top_right">Top-Right</option>
+                    <option value="bottom_left" selected>Bottom-Left</option>
+                    <option value="bottom_right">Bottom-Right</option>
+                </select>
+            </div>
+        </div>
+
+         <!-- Output Resolution -->
+        <label class="control-label">Output Resolution</label>
+        <div class="card card-body" style="flex-direction: row;">
+            <div class="form-group" style="margin-right: 15px;">
+                <label class="control-label">Width</label>
+                {{ form.output_width }}
+            </div>
+            <div class="form-group">
+                <label class="control-label">Height</label>
+                {{ form.output_height }}
+            </div>
+        </div>
+
+
+        <div class="card">
+            <button class="btn btn-primary" type="submit">Upload Video</button>
+        </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block footer_javascript_page %}
+<script>
+    function update_input_label(element, id, delimiter, callback) {
+        let val_path = element.value.split(delimiter);
+        let trimmed_val = val_path[val_path.length - 1];
+        document.getElementById(id).innerText = trimmed_val;
+        // call callback with uploaded file
+        if (callback !== undefined) {
+            callback(element.files[0]);
+        }
+    }
+
+    function isFileImage(file) {
+        return file && file['type'].split('/')[0] === 'image';
+    }
+
+
+    function enableInsert(checkbox, id) {
+        if (checkbox.checked) {
+            document.getElementById(id).style.display = "";
+        } else {
+            document.getElementById(id).style.display = "none";
+        }
+    }
+
+    $(document).ready(function() {
+        document.getElementById("id_video").onchange = function() {
+            update_input_label(this, "video_label", "\\");
+        };
+
+        let first_insert_callback = function(file) {
+            if (isFileImage(file)) {
+                // this file is an image - show audio insert
+                document.getElementById("first_insert_audio_group").style.display = "";
+            } else {
+                // this file is not an image - hide audio insert
+                document.getElementById("first_insert_audio_group").style.display = "none";
+            }
+        }
+        document.getElementById("id_first_insert_img").onchange = function() {
+            update_input_label(this, "first_insert_img_label", "\\", first_insert_callback);
+        };
+
+        document.getElementById("id_first_insert_audio").onchange = function() {
+            update_input_label(this, "first_insert_audio_label", "\\");
+        };
+
+        let second_insert_callback = function(file) {
+            if (isFileImage(file)) {
+                // this file is an image - show audio insert
+                document.getElementById("second_insert_audio_group").style.display = "";
+            } else {
+                // this file is not an image - hide audio insert
+                document.getElementById("second_insert_audio_group").style.display = "none";
+            }
+        }
+        document.getElementById("id_second_insert_img").onchange = function() {
+            update_input_label(this, "second_insert_img_label", "\\", second_insert_callback);
+        };
+        document.getElementById("id_second_insert_audio").onchange = function() {
+            update_input_label(this, "second_insert_audio_label", "\\");
+        };
+        document.getElementById("id_logo").onchange = function() {
+            update_input_label(this, "logo_label", "\\");
+        };
+    });
+</script>
+{% endblock footer_javascript_page %}

@@ -1,0 +1,364 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+{% block head %}
+<style>
+    .control-label {
+        color:grey;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container card">
+    <h2>Account Settings</h2>
+    <form method="post" class="uniForm" enctype="multipart/form-data">
+    {% csrf_token %}
+    <!--{{ form|crispy }} I have no idea why but we need to keep this-->
+
+        <!-- Business Name -->
+        <div class="form-group">
+            <label class="control-label">Business Name</label>
+            {{ form.business_name }}
+        </div>
+
+        <!-- Address -->
+        <label class="control-label">Business Address</label>
+        <div class="card card-body">
+            <div class="form-group">
+                <label class="control-label">Address 1</label>
+                {{ form.address1 }}
+            </div>
+            <div class="form-group">
+                <label class="control-label">Address 2 (optional)</label>
+                {{ form.address2 }}
+            </div>
+            <div class="form-group">
+                <label class="control-label">Zip Code</label>
+                {{ form.zip_code }}
+            </div>
+            <div class="form-group">
+                <label class="control-label">State</label>
+                {{ form.state }}
+            </div>
+            <div class="form-group">
+                <label class="control-label">City</label>
+                {{ form.city }}
+            </div>
+        </div>
+
+        <!-- Business Description -->
+        <div class="form-group">
+            <label class="control-label">Business Description</label>
+            {{ form.description }}
+        </div>
+
+        <!-- Coupon Description -->
+        <div class="form-group">
+            <label class="control-label">Coupon Description</label>
+            {{ form.coupon_description }}
+        </div>
+
+        <div class="card card-body">
+            <!-- Logo Uploading -->
+            <div class="form-group">
+                <label class="control-label">Dark Logo</label>
+                <div class="input-group">
+                    <div class="custom-file">
+                        {% crispy_field form.dark_brand_logo 'class' 'custom-file-input' %}
+                        <label id="id_dark_logo_label" for="{{ form.dark_brand_logo.id_for_label }}"
+                            class="custom-file-label"> {{ "Upload Logo" |safe }} </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logo Uploading -->
+            <div class="form-group">
+                <label class="control-label">Light Logo</label>
+                <div class="input-group">
+                    <div class="custom-file">
+                        {% crispy_field form.light_brand_logo 'class' 'custom-file-input' %}
+                        <label id="id_light_logo_label" for="{{ form.light_brand_logo.id_for_label }}"
+                            class="custom-file-label"> {{ "Upload Logo" |safe }} </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- First Insert -->
+        <div id="first_insert_card" class="card card-body">
+            <div class="form-group">
+                <label class="control-label">First Insert</label>
+                <div class="input-group">
+                    <div class="custom-file">
+                        {% crispy_field form.first_insert 'class' 'custom-file-input' %}
+                        <label id="id_first_insert_label" for="{{ form.first_insert.id_for_label }}"
+                               class="custom-file-label"> {{ "Choose Media File" |safe }} </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="first_insert_audio_group">
+                <label class="control-label">Audio</label>
+                <div class="input-group">
+                    <div class="custom-file">
+                        {% crispy_field form.first_insert_audio 'class' 'custom-file-input' %}
+                        <label id="id_first_insert_audio_label" for="{{ form.first_insert_audio.id_for_label }}"
+                               class="custom-file-label"> {{ "Choose Audio" |safe }} </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Insert -->
+        <br>
+        <div class="card card-body" id="second_insert_card">
+            <div class="form-group">
+                <label class="control-label">Second Insert</label>
+                <div class="input-group">
+                    <div class="custom-file">
+                        {% crispy_field form.second_insert 'class' 'custom-file-input' %}
+                        <label id="id_second_insert_label" for="{{ form.second_insert.id_for_label }}"
+                               class="custom-file-label"> {{ "Choose Media File" |safe }} </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="second_insert_audio_group">
+                <label class="control-label">Audio</label>
+                <div class="input-group">
+                    <div class="custom-file">
+                        {% crispy_field form.second_insert_audio 'class' 'custom-file-input' %}
+                        <label id="id_second_insert_audio_label" for="{{ form.second_insert_audio.id_for_label }}"
+                               class="custom-file-label"> {{ "Choose Audio" |safe }} </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- social  -->
+        <div class="form-group">
+            <label class="control-label">Social Accounts</label>
+            <div class="card card-body social_media_box">
+                <div id="facebook_page">
+                    <div class="textvalign spacebetweencontainer">
+                        <span>
+                            <span id="facebook_connect_button">
+                                <button class="btn btn-primary" onclick="connect_fb(event)">Connect with Facebook</button>
+                            </span>
+                            <span id="facebook_disconnect_button" style="display:none;">
+                                <button class="btn btn-warning" onclick="disconnect_facebook(event)">Disconnect Facebook</button>
+                            </span>
+                        </span>
+                        <span id="facebook_details">
+                            <span id="fbpagename" style="display:none;">
+                                <i class="fa fa-check fa-lg" style="color:green"></i>
+                                connected to page <a href="https://www.facebook.com/{{ fb_pageID }}" id="fb_page_url">{{ fb_pageName }}</a>
+                            </span>
+                            <span id="facebook_error" style="display:none;" class="alert">no errors</span>
+
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <button class="btn btn-primary" type="submit">Update Account</button> <!-- TODO:: add click connect_to_FB callback-->
+        </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block footer_javascript_page %}
+<script>
+    function update_input_label(element, label_id, value, delimiter, callback) {
+        let val_path = value.split(delimiter);
+        value = val_path[val_path.length - 1];
+        document.getElementById(label_id).innerText = value;
+        // call callback with uploaded file
+        if (callback !== undefined) {
+            callback(element.files[0]);
+        }
+    }
+
+    function initInputField(id, value, callback) {
+        let element = document.getElementById(id);
+        if (value) {
+            update_input_label(element, id+"_label", value, "/");
+        }
+
+        element.onchange = function() {
+            update_input_label(element, id+"_label", this.value, "\\", callback);
+        }
+    }
+
+    function isFileImage(file) {
+        return file && file['type'].split('/')[0] === 'image';
+    }
+
+    $(document).ready(function() {
+        // logo
+        initInputField("id_logo", "{{ form.logo.value }}");
+
+        // first insert
+        let first_insert_callback = function(file) {
+            if (isFileImage(file)) {
+                // this file is an image - show audio insert
+                document.getElementById("first_insert_audio_group").style.display = "";
+            } else {
+                // this file is not an image - hide audio insert
+                document.getElementById("first_insert_audio_group").style.display = "none";
+            }
+        }
+        initInputField("id_first_insert", "{{ form.first_insert.value }}", first_insert_callback);
+
+        // first insert audio
+        initInputField("id_first_insert_audio", "{{ form.first_insert_audio.value }}");
+
+        // second insert
+        let second_insert_callback = function(file) {
+            if (isFileImage(file)) {
+                // this file is an image - show audio insert
+                document.getElementById("second_insert_audio_group").style.display = "";
+            } else {
+                // this file is not an image - hide audio insert
+                document.getElementById("second_insert_audio_group").style.display = "none";
+            }
+        }
+        initInputField("id_second_insert", "{{ form.second_insert.value }}", second_insert_callback);
+
+        // second insert audio
+        initInputField("id_second_insert_audio", "{{ form.second_insert_audio.value }}");
+
+        if ({{ fb_connected }}){
+            show_fb_page("{{ fb_pageID }}", "{{ fb_pageName }}");
+        } else {
+            hide_fb_page();
+        }
+    });
+
+
+    // facebook conections
+     // facebook code for connecting to it
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '{{ FB_APP_ID }}',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v3.2'   // should include the v in the string, v3.2 and not just 3.2
+    });
+
+    FB.AppEvents.logPageView();
+
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+
+    function connect_fb(e) {
+        e.preventDefault();
+        console.log('testing fb..');
+
+        FB.login(function(response) {
+             connect_fb2();
+           },
+           {scope: 'public_profile,email,manage_pages,publish_pages,ads_management'}
+        );
+     }
+
+     function connect_fb2() {
+        let csrf = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+        FB.getLoginStatus(
+            function(response) {
+                if (response.status == "connected") {
+                    let fbid = response.authResponse.userID;
+                    let fbtoken = response.authResponse.accessToken;
+                    let datadict = {'fbid': fbid, 'fbtoken': fbtoken};
+                    let headers = {'X-CSRFToken': csrf};
+                    postData("{{ APP_SERVER }}/facebook_pages_for_user", fb_user_callback, datadict, headers);
+
+                } else {
+                    hide_fb_page();
+                    show_fb_error("could not authorize with FB");
+                }
+            }
+        )
+    }
+
+    function fb_user_callback(response) {
+        response = JSON.parse(response);
+        if (response['status'] == 'ok') {
+            show_fb_page(response['data']['fb_pageID'], response['data']['fb_pageName']);
+            show_fb_error();
+        } else {
+            hide_fb_page();
+            show_fb_error(response['error']);
+        }
+    }
+
+function disconnect_facebook(e) {
+    e.preventDefault();
+    let csrf = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+    let headers = {'X-CSRFToken': csrf};
+    postData("{{ APP_SERVER }}/delete_facebook", delete_fb_callback, {}, headers);
+}
+
+function delete_fb_callback(r) {
+    hide_fb_page();
+}
+
+function show_fb_error(msg) {
+    if (msg) {
+        document.getElementById('facebook_error').style.display = 'block';
+        document.getElementById('facebook_error').style.color = 'red';
+        document.getElementById('facebook_error').innerHTML = msg;
+    } else {
+       document.getElementById('facebook_error').style.display = 'none';
+    }
+}
+
+function show_fb_page(fb_pageID, fb_pageName) {
+    document.getElementById('facebook_connect_button').style.display = 'none';
+    document.getElementById('facebook_disconnect_button').style.display = 'block';
+    document.getElementById('fbpagename').style.display = 'block';
+
+    document.getElementById('fb_page_url').innerHTML = fb_pageName;
+    document.getElementById('fb_page_url').setAttribute("href", "https://www.facebook.com/" + fb_pageID);
+
+}
+
+function hide_fb_page() {
+    document.getElementById('facebook_connect_button').style.display = 'block';
+    document.getElementById('facebook_disconnect_button').style.display = 'none';
+    document.getElementById('fbpagename').style.display = 'none';
+}
+
+function postData(theUrl, callback, data, headers = {}) {
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', theUrl, true);
+    for (let h in headers) {
+       xhr.setRequestHeader(h, headers[h]);
+    }
+
+    if (data !== undefined) {
+       let form_data = new FormData ();
+       for (let key in data) {
+           form_data.append(key, data[key]);
+       }
+       xhr.send(form_data);
+    } else {
+       xhr.send(null);
+    }
+    xhr.onload = function(e) {
+        callback(this.response);
+    };
+}
+
+
+</script>
+{% endblock footer_javascript_page %}
