@@ -1,0 +1,15 @@
+django==2.1.7
+django-crispy-forms
+requests==2.21.0
+Pillow==5.4.1
+python-decouple
+django-countries
+django-localflavor
+ffmpeg-python==0.1.17
+djangorestframework
+djangorestframework-filters
+django-cors-headers==3.0.2
+django-filter
+django-admin-numeric-filter
+django-url-filter
+django-request-logging

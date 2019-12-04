@@ -1,0 +1,12 @@
+{% autoescape off %}
+Hi {{ user.username }},
+
+{% block content %}
+<p>One of your subscriptions has a new video!</p>
+
+<p><strong>Series:</strong> {{ series_name }}</p>
+<p><strong>Title:</strong> {{ video_title }}</p>
+
+Click <a href="https://{{ domain }}/video/{{ video_id }}">here</a> to view
+{% endblock %}
+{% endautoescape %}

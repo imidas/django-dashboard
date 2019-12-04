@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block head %}
+<style>
+    .manage_button {
+        float: right
+    }
+</style>
+{% endblock %}
+{% block custom_navbar %}
+<li class="nav-item"><a href="/upload2/" class="nav-link">Upload/Render</a></li>
+<li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+        Manage
+      </a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="/fantom/rawvideo/">Videos</a>
+        <a class="dropdown-item" href="/fantom/videoseries/">Series</a>
+        <a class="dropdown-item" href="/fantom/account/">Accounts</a>
+      </div>
+    </li>
+
+{% endblock custom_navbar %}
+{% block content %}
+<div class="card card-body container main_card">
+    <table class="table">
+    <thead>
+        <tr>
+            <th scope="col">User Name</th>
+            <th scope="col">Business Name</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in accounts %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.business_name }}</td>
+            <td><a class="btn btn-primary manage_button" href="/manage_campaign/{{ user.id }}">Manage Campaigns</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+</div>
+{% endblock %}

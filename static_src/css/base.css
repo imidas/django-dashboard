@@ -1,0 +1,55 @@
+html {
+  height:100%;
+}
+
+body {
+    width: 100%;
+    height:100%;
+    padding-top: 55px;  // compensate for navbar fixed-top.https://www.quackit.com/bootstrap/bootstrap_4/tutorial/bootstrap_navbars.cfm
+}
+
+.navbar {
+    background:#404040;
+}
+
+.nav-link,
+.navbar-brand {
+    color: #f4f4f4;
+    cursor: pointer;
+}
+.nav-link {
+    margin-right: 1em !important;
+}
+
+.nav-link:hover,
+.navbar-brand:hover {
+    color: #f97300;
+}
+ {
+    color: #f97300;
+}
+.navbar-collapse {
+    justify-content: flex-end;
+}
+
+.credits {
+    margin: 10px;
+    color: rgb(50,50,255);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+a.btn {border-radius: .25rem; border: 1px solid transparent; color: #fff !important; }
+a.btn:hover { border-radius: .25rem; }
+
+
+
+.textvalign > span {
+    line-height: 2em;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.spacebetweencontainer > span:first-of-type {
+  flex: 1;
+}

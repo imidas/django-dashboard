@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block head %}
+<link rel="stylesheet" href="https://test.s3.amazonaws.com/css/view_video.css">
+
+{% endblock head %}
+{% block content %}
+
+
+    <div class="row ">
+        <div class="col-8">
+              <div class="card">
+                  <div class="card-body">
+                      <h4 class="card-subtitle d-flex justify-content-end">
+                        <span class="mr-auto">Series</span>
+                        <span class="text-muted">{{ video.series.name }} </span>
+                      </h4>
+
+
+                      <video controls
+                        src="{{ video.video.url }}"
+                        poster="{{ video.thumbnail.url }}" >
+                      </video>
+
+
+
+                  <h4 class="card-title"> {{ video.name }}</h4>
+                  <p class="card-text"> {{ video.num_downloads }} downloads</p>
+
+
+                  <a href="/download_video/{{ video.id }}"><i class="card-meta float-right fa fa-arrow-circle-o-down fa-3x" style="color: #0099CC"></i></a>
+
+                    <p class="card-text">
+                        Description: {{ video.description }}
+                    </p>
+
+
+                  <div class="row">
+                    <div class="col">
+                      <div class="d-flex justify-content-end">PROJECTED test SCORE {{ video.projected_score }} </div>
+                      <div>Uploaded {{ video.date_created }}</div>
+                    </div>
+                  </div>
+
+                </div> <!-- card body -->
+
+
+
+
+                </div>
+        </div>
+
+
+        <div class="col-4">
+                <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Suggested Social Copy</h4>
+                    <h6 class="card-subtitle text-muted">Upload date {{ video.date_created }}</h6>
+                    <div class="card-content">{{ video.social_copy }}</div>
+                </div>
+              </div>
+                <div class="card">
+                        <div class="card-body">
+                            {% if next_video %}
+                            <a href="{% url 'view_video' next_video.pk %}">
+                            <h5 class="card-title">Coming Up</h5>
+                            <h6 class="card-subtitle text-muted">Upload date {{ next_video.date_created }}</h6>
+                            <div class="card-content">
+                                <img src="{{ next_video.thumbnail.url }}" style="max-height:100%; max-width:100%;"/></div>
+                            </a>
+                            {% else %}
+                            <h5 class="card-title">All caught up!</h5>
+                            {% endif %}
+                        </div>
+                      </div>
+                <div class="card">
+                    <div class="card-body">
+                        {% if prev_video %}
+                        <a href="{% url 'view_video' prev_video.pk %}">
+                                <h5 class="card-title">Previous Show</h5>
+                                <h6 class="card-subtitle text-muted">Upload date {{ prev_video.date_created }}</h6>
+                            <div class="card content">
+                                <img src="{{ prev_video.thumbnail.url }}" style="max-height:100%; max-width:100%;"/>
+                            </div>
+                        </a>
+                        {% else %}
+                        <h5 class="card-title">All caught up!</h5>
+                        {% endif %}
+                    </div>
+                  </div>
+        </div>
+
+
+    </div>
+
+
+{% endblock %}
+
+{% block footer_javascript_page %}
+<script>
+
+
+
+</script>
+{% endblock footer_javascript_page %}

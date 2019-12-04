@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block head %}
+<link rel="stylesheet" href="https://test.s3.amazonaws.com/css/view_video.css">
+
+{% endblock head %}
+
+
+{% block content %}
+
+
+<div class="card" style="max-width: 40rem;">
+    <div class="card-header">
+Distribute
+</div>
+                  <div class="card-body distribute">
+
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <p class="h5">Facebook</p>
+                            <div class="form-check">
+                                <label class="form-check-label"><input type="checkbox" class="form-check-input" value="">Organic Video</label>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <p class="h5">Instagram</p>
+                            <div class="form-check">
+                                <label class="form-check-label"><input type="checkbox" class="form-check-input" value="">Story</label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label"><input type="checkbox" class="form-check-input" value="">Newsfeed</label>
+                            </div>
+                        </li>
+
+
+                          <li class="list-group-item">
+                            <p class="h5">YouTube</p>
+                            <div class="form-check">
+                                <label class="form-check-label"><input type="checkbox" class="form-check-input" value="">Channel</label>
+                            </div>
+                        </li>
+
+                             <li class="list-group-item">
+                            <p class="h5">Twitter</p>
+                            <div class="form-check">
+                                <label class="form-check-label"><input type="checkbox" class="form-check-input" value="">Channel</label>
+                            </div>
+
+                                 <li class="list-group-item">
+                            <p class="h5">Custom</p>
+                            <div class="form-check">
+                                <label class="form-check-label"><input type="checkbox" class="form-check-input" value="">Channel</label>
+                            </div>
+                          <div class="form-check">
+                                <label class="form-check-label"><input type="checkbox" class="form-check-input" value="">Channel</label>
+                            </div>
+                        </li>
+
+                        </ul>
+
+
+
+                      <div class="card-footer">
+                          <div class="float-right">
+                                <ul class="nav nav-pills card-header-pills">
+                                    <li class="nav-item btn-alert">
+                                    <a class="nav-link active " href="#">Post</a>
+                                    </li>
+                                </ul>
+                              </div>
+                      </div>
+
+
+
+                  </div>
+              </div>
+
+
+
+{% endblock %}
+
+{% block footer_javascript_page %}
+<script>
+
+
+
+</script>
+{% endblock footer_javascript_page %}

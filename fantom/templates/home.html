@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block head %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet" media="screen">
+{% endblock head %}
+{% block header %}
+<!-- Removing navbar in this page -->
+{% endblock %}
+
+
+
+{% block sidebar %}
+<!-- Removing sidebar in this page -->
+{% endblock %}
+
+{% block content %}
+
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+
+    <!-- Icon -->
+    <div id="top_image" class="fadeIn first">
+      <img src="https://test.com/site/images/test-Logo-black-yellow.png" width="400px" id="icon" alt="User Icon" />
+    </div>
+
+    <!-- Login Form -->
+    <form method="post" class="uniForm">
+        {% csrf_token %}
+      <input type="text" id="id_email" class="fadeIn second" name="email" placeholder="email">
+      <input type="password" id="id_password" class="fadeIn third" name="password" placeholder="password">
+        <!--<a class="underlineHover">Forgot your password?</a>-->
+      <input type="submit" class="fadeIn fourth" value="Log In">
+    </form>
+
+    <!-- Remind Passowrd -->
+    <div id="formFooter">
+      Don't have a Catauplt account? <a class="underlineHover" href="/signup/">Sign up now!</a>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
